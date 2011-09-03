@@ -9,11 +9,12 @@ Gem::Specification.new do |s|
   s.email       = ["ernie@metautonomo.us"]
   s.homepage    = "http://github.com/ernie/polyamorous"
   s.summary     = %q{
-    Extends ActiveRecord's associations to support polymorphic belongs_to associations.
+    Loves/is loved by polymorphic belongs_to associations, Ransack, Squeel, MetaSearch...
   }
   s.description = %q{
     This is just an extraction from Ransack/Squeel. You probably don't want to use this
-    directly.
+    directly. It extends ActiveRecord's associations to support polymorphic belongs_to
+    associations.
   }
 
   s.rubyforge_project = "polyamorous"
