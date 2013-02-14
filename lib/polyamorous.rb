@@ -1,4 +1,5 @@
 require "polyamorous/version"
+require 'active_record'
 
 module Polyamorous
   if defined?(::ActiveRecord::Associations::JoinDependency)
@@ -10,7 +11,6 @@ module Polyamorous
   end
 end
 
-require 'active_record'
 require 'polyamorous/join'
 require 'polyamorous/join_association'
 require 'polyamorous/join_dependency'
