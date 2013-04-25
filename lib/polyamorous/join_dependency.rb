@@ -5,6 +5,9 @@ module Polyamorous
       base.class_eval do
         alias_method_chain :build, :polymorphism
         alias_method_chain :graft, :polymorphism
+        if base.method_defined?(:active_record)
+          alias_method :base_klass, :active_record
+        end
       end
     end
 
@@ -58,7 +61,7 @@ module Polyamorous
         unless reflection.options[:polymorphic]
           association
         else
-          association if association.active_record == klass
+          association if association.base_klass == klass
         end
       end
     end

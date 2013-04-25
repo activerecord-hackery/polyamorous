@@ -6,6 +6,9 @@ module Polyamorous
         alias_method_chain :initialize, :polymorphism
         alias_method :equality_without_polymorphism, :==
         alias_method :==, :equality_with_polymorphism
+        if base.method_defined?(:active_record)
+          alias_method :base_klass, :active_record
+        end
 
         if ActiveRecord::VERSION::STRING =~ /^3\.0\./
           alias_method_chain :association_join, :polymorphism
@@ -35,7 +38,7 @@ module Polyamorous
     end
 
     def equality_with_polymorphism(other)
-      equality_without_polymorphism(other) && active_record == other.active_record
+      equality_without_polymorphism(other) && base_klass == other.base_klass
     end
 
     def build_constraint_with_polymorphism(reflection, table, key, foreign_table, foreign_key)
@@ -60,7 +63,7 @@ module Polyamorous
 
         parent_table = Arel::Table.new(parent.table_name, :as      => parent.aliased_table_name,
                                                           :engine  => arel_engine,
-                                                          :columns => parent.active_record.columns)
+                                                          :columns => parent.base_klas.columns)
 
         @join << parent_table[reflection.options[:foreign_type]].eq(reflection.klass.name)
       end

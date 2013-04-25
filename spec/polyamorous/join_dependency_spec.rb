@@ -37,6 +37,14 @@ module Polyamorous
       specify { subject.join_associations.should have(1).association }
       specify { subject.join_associations.should be_all { |a| a.join_type == Arel::InnerJoin } }
       specify { subject.join_associations.first.table_name.should eq 'people' }
+
+      it 'finds a join association respecting polymorphism' do
+        parent = subject.join_base
+        reflection = Note.reflect_on_association(:notable)
+        subject.find_join_association_respecting_polymorphism(
+          reflection, parent, Person
+        ).should eq subject.join_associations.first
+      end
     end
 
     context 'with polymorphic belongs_to join and nested symbol join' do
