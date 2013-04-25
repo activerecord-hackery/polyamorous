@@ -63,7 +63,7 @@ module Polyamorous
 
         parent_table = Arel::Table.new(parent.table_name, :as      => parent.aliased_table_name,
                                                           :engine  => arel_engine,
-                                                          :columns => parent.base_klas.columns)
+                                                          :columns => parent.base_klass.columns)
 
         @join << parent_table[reflection.options[:foreign_type]].eq(reflection.klass.name)
       end
