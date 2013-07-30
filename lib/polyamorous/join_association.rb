@@ -29,12 +29,11 @@ module Polyamorous
     end
 
     def swapping_reflection_klass(reflection, klass)
-      reflection = reflection.clone
-      original_polymorphic = reflection.options.delete(:polymorphic)
-      reflection.instance_variable_set(:@klass, klass)
-      yield reflection
-    ensure
-      reflection.options[:polymorphic] = original_polymorphic
+      new_reflection = reflection.clone
+      new_reflection.instance_variable_set(:@options, reflection.options.clone)
+      new_reflection.options.delete(:polymorphic)
+      new_reflection.instance_variable_set(:@klass, klass)
+      yield new_reflection
     end
 
     def equality_with_polymorphism(other)
