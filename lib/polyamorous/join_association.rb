@@ -22,6 +22,7 @@ module Polyamorous
       if polymorphic_class && ::ActiveRecord::Base > polymorphic_class
         swapping_reflection_klass(reflection, polymorphic_class) do |reflection|
           initialize_without_polymorphism(reflection, join_dependency, parent)
+          self.reflection.options[:polymorphic] = true
         end
       else
         initialize_without_polymorphism(reflection, join_dependency, parent)

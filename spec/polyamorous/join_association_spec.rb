@@ -28,10 +28,15 @@ module Polyamorous
     it 'leaves the orginal reflection intact for thread safety' do
       reflection.instance_variable_set(:@klass, Article)
       join_association.swapping_reflection_klass(reflection, Person) do |new_reflection|
-        new_reflection.options.object_id.should_not eq(reflection.options.object_id)
+        new_reflection.options.should_not equal reflection.options
+        new_reflection.options.should_not have_key(:polymorphic)
         new_reflection.klass.should == Person
         reflection.klass.should == Article
       end
+    end
+
+    it 'sets the polmorphic option to true after initializing' do
+      join_association.options[:polymorphic].should be_true
     end
   end
 end
