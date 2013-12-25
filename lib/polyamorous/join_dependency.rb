@@ -4,25 +4,10 @@ module Polyamorous
     def self.included(base)
       base.class_eval do
         alias_method_chain :build, :polymorphism
-        alias_method_chain :graft, :polymorphism
         if base.method_defined?(:active_record)
           alias_method :base_klass, :active_record
         end
       end
-    end
-
-    def graft_with_polymorphism(*associations)
-      associations.each do |association|
-        unless join_associations.detect {|a| association == a}
-          if association.reflection.options[:polymorphic]
-            build(Join.new(association.reflection.name, association.join_type, association.reflection.klass),
-                  association.find_parent_in(self) || join_base, association.join_type)
-          else
-            build(association.reflection.name, association.find_parent_in(self) || join_base, association.join_type)
-          end
-        end
-      end
-      self
     end
 
     if ActiveRecord::VERSION::STRING =~ /^3\.0\./
@@ -35,7 +20,7 @@ module Polyamorous
       end
     end
 
-    def build_with_polymorphism(associations, parent = nil, join_type = Arel::InnerJoin)
+    def build_with_polymorphism(associations, parent = nil)
       case associations
       when Join
         parent ||= _join_parts.last
@@ -52,7 +37,7 @@ module Polyamorous
 
         join_association
       else
-        build_without_polymorphism(associations, parent, join_type)
+        build_without_polymorphism(associations, parent)
       end
     end
 
@@ -73,6 +58,5 @@ module Polyamorous
         JoinAssociation.new(reflection, self, parent)
       end
     end
-
   end
 end
