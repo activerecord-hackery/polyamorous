@@ -3,9 +3,10 @@ require 'spec_helper'
 module Polyamorous
   describe JoinAssociation do
     let(:join_dependency) { new_join_dependency Note, {} }
-    let(:parent) { join_dependency.join_base }
+    let(:parent) { join_dependency.join_root }
     let(:reflection) { Note.reflect_on_association(:notable) }
     let(:join_association) { JoinAssociation.new(reflection, join_dependency, parent, Article) }
+
     subject {
       join_dependency.build_join_association_respecting_polymorphism(
         reflection, parent, Person

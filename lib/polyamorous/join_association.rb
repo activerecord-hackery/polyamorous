@@ -1,6 +1,5 @@
 module Polyamorous
   module JoinAssociationExtensions
-
     def self.included(base)
       base.class_eval do
         alias_method_chain :initialize, :polymorphism
@@ -21,11 +20,11 @@ module Polyamorous
     def initialize_with_polymorphism(reflection, join_dependency, parent = nil, polymorphic_class = nil)
       if polymorphic_class && ::ActiveRecord::Base > polymorphic_class
         swapping_reflection_klass(reflection, polymorphic_class) do |reflection|
-          initialize_without_polymorphism(reflection, join_dependency, parent)
+          initialize_without_polymorphism(reflection, join_dependency)
           self.reflection.options[:polymorphic] = true
         end
       else
-        initialize_without_polymorphism(reflection, join_dependency, parent)
+        initialize_without_polymorphism(reflection, join_dependency)
       end
     end
 
@@ -70,6 +69,5 @@ module Polyamorous
 
       @join
     end
-
   end
 end
