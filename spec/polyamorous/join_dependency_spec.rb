@@ -39,11 +39,11 @@ module Polyamorous
       specify { subject.join_root.drop(1).first.table_name.should eq 'people' }
 
       it 'finds a join association respecting polymorphism' do
-        parent = subject.join_base
+        parent = subject.join_root
         reflection = Note.reflect_on_association(:notable)
         subject.find_join_association_respecting_polymorphism(
           reflection, parent, Person
-        ).should eq subject.join_associations.first
+        ).should eq subject.join_root.drop(1).first
       end
     end
 
@@ -55,6 +55,5 @@ module Polyamorous
       specify { subject.join_root.drop(1).first.table_name.should eq 'people' }
       specify { subject.join_root.drop(1)[1].table_name.should eq 'comments' }
     end
-
   end
 end

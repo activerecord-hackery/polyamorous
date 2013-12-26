@@ -5,7 +5,7 @@ module Polyamorous
     let(:join_dependency) { new_join_dependency Note, {} }
     let(:parent) { join_dependency.join_root }
     let(:reflection) { Note.reflect_on_association(:notable) }
-    let(:join_association) { JoinAssociation.new(reflection, join_dependency, parent, Article) }
+    let(:join_association) { JoinAssociation.new(reflection, parent.children, Article) }
 
     subject {
       join_dependency.build_join_association_respecting_polymorphism(
@@ -15,9 +15,7 @@ module Polyamorous
 
     it 'respects polymorphism on equality test' do
       subject.should eq(
-        join_dependency.build_join_association_respecting_polymorphism(
-          reflection, parent, Person
-        )
+        join_dependency.build_join_association_respecting_polymorphism(reflection, parent, Person)
       )
       subject.should_not eq(
         join_dependency.build_join_association_respecting_polymorphism(
@@ -37,7 +35,7 @@ module Polyamorous
     end
 
     it 'sets the polmorphic option to true after initializing' do
-      join_association.options[:polymorphic].should be_true
+      join_association.reflection.options[:polymorphic].should be_true
     end
   end
 end
