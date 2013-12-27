@@ -31,7 +31,7 @@ module Polyamorous
           reflection.check_validity!
 
           if reflection.options[:polymorphic]
-            raise EagerLoadPolymorphicError.new(reflection)
+            raise ActiveRecord::EagerLoadPolymorphicError.new(reflection)
           end
 
           JoinAssociation.new reflection, build(right, reflection.klass)
