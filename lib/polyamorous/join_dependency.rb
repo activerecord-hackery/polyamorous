@@ -1,63 +1,46 @@
 module Polyamorous
   module JoinDependencyExtensions
-
     def self.included(base)
+      base.extend ClassMethods
+
       base.class_eval do
+        class << self
+          alias_method_chain :walk_tree, :polymorphism
+        end
+
         alias_method_chain :build, :polymorphism
-        alias_method_chain :graft, :polymorphism
         if base.method_defined?(:active_record)
           alias_method :base_klass, :active_record
         end
       end
     end
 
-    def graft_with_polymorphism(*associations)
-      associations.each do |association|
-        unless join_associations.detect {|a| association == a}
-          if association.reflection.options[:polymorphic]
-            build(Join.new(association.reflection.name, association.join_type, association.reflection.klass),
-                  association.find_parent_in(self) || join_base, association.join_type)
+    def build_with_polymorphism(associations, base_klass)
+      associations.map do |name, right|
+        if name.is_a? Join
+          reflection = find_reflection base_klass, name.name
+          reflection.check_validity!
+
+          if reflection.options[:polymorphic]
+            JoinAssociation.new reflection, build(right, name.klass || base_klass), name.klass
           else
-            build(association.reflection.name, association.find_parent_in(self) || join_base, association.join_type)
+            JoinAssociation.new reflection, build(right, reflection.klass), name.klass
           end
+        else
+          reflection = find_reflection base_klass, name
+          reflection.check_validity!
+
+          if reflection.options[:polymorphic]
+            raise ActiveRecord::EagerLoadPolymorphicError.new(reflection)
+          end
+
+          JoinAssociation.new reflection, build(right, reflection.klass)
         end
-      end
-      self
-    end
-
-    if ActiveRecord::VERSION::STRING =~ /^3\.0\./
-      def _join_parts
-        @joins
-      end
-    else
-      def _join_parts
-        @join_parts
-      end
-    end
-
-    def build_with_polymorphism(associations, parent = nil, join_type = Arel::InnerJoin)
-      case associations
-      when Join
-        parent ||= _join_parts.last
-        reflection = parent.reflections[associations.name] or
-          raise ::ActiveRecord::ConfigurationError, "Association named '#{ associations.name }' was not found; perhaps you misspelled it?"
-
-        unless join_association = find_join_association_respecting_polymorphism(reflection, parent, associations.klass)
-          @reflections << reflection
-          join_association = build_join_association_respecting_polymorphism(reflection, parent, associations.klass)
-          join_association.join_type = associations.type
-          _join_parts << join_association
-          cache_joined_association(join_association)
-        end
-
-        join_association
-      else
-        build_without_polymorphism(associations, parent, join_type)
       end
     end
 
     def find_join_association_respecting_polymorphism(reflection, parent, klass)
-      if association = find_join_association(reflection, parent)
+      if association = parent.children.find { |j| j.reflection == reflection }
         unless reflection.options[:polymorphic]
           association
         else
@@ -68,11 +51,21 @@ module Polyamorous
 
     def build_join_association_respecting_polymorphism(reflection, parent, klass)
       if reflection.options[:polymorphic] && klass
-        JoinAssociation.new(reflection, self, parent, klass)
+        JoinAssociation.new(reflection, self, klass)
       else
-        JoinAssociation.new(reflection, self, parent)
+        JoinAssociation.new(reflection, self)
       end
     end
 
+    module ClassMethods
+      def walk_tree_with_polymorphism(associations, hash)
+        case associations
+        when Join
+          hash[associations] ||= {}
+        else
+          walk_tree_without_polymorphism(associations, hash)
+        end
+      end
+    end
   end
 end

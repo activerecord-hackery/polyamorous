@@ -1,11 +1,8 @@
 module Polyamorous
   module JoinAssociationExtensions
-
     def self.included(base)
       base.class_eval do
         alias_method_chain :initialize, :polymorphism
-        alias_method :equality_without_polymorphism, :==
-        alias_method :==, :equality_with_polymorphism
         if base.method_defined?(:active_record)
           alias_method :base_klass, :active_record
         end
@@ -18,14 +15,14 @@ module Polyamorous
       end
     end
 
-    def initialize_with_polymorphism(reflection, join_dependency, parent = nil, polymorphic_class = nil)
+    def initialize_with_polymorphism(reflection, children, polymorphic_class = nil)
       if polymorphic_class && ::ActiveRecord::Base > polymorphic_class
         swapping_reflection_klass(reflection, polymorphic_class) do |reflection|
-          initialize_without_polymorphism(reflection, join_dependency, parent)
+          initialize_without_polymorphism(reflection, children)
           self.reflection.options[:polymorphic] = true
         end
       else
-        initialize_without_polymorphism(reflection, join_dependency, parent)
+        initialize_without_polymorphism(reflection, children)
       end
     end
 
@@ -37,17 +34,19 @@ module Polyamorous
       yield new_reflection
     end
 
-    def equality_with_polymorphism(other)
-      equality_without_polymorphism(other) && base_klass == other.base_klass
+    # Reference https://github.com/rails/rails/commit/9b15db51b78028bfecdb85595624de4b838adbd1
+    # NOTE Not sure we still need it?
+    def ==(other)
+      base_klass == other.base_klass
     end
 
-    def build_constraint_with_polymorphism(reflection, table, key, foreign_table, foreign_key)
+    def build_constraint_with_polymorphism(klass, table, key, foreign_table, foreign_key)
       if reflection.options[:polymorphic]
-        build_constraint_without_polymorphism(reflection, table, key, foreign_table, foreign_key).and(
+        build_constraint_without_polymorphism(klass, table, key, foreign_table, foreign_key).and(
           foreign_table[reflection.foreign_type].eq(reflection.klass.name)
         )
       else
-        build_constraint_without_polymorphism(reflection, table, key, foreign_table, foreign_key)
+        build_constraint_without_polymorphism(klass, table, key, foreign_table, foreign_key)
       end
     end
 
@@ -70,6 +69,5 @@ module Polyamorous
 
       @join
     end
-
   end
 end
