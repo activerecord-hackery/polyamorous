@@ -5,7 +5,7 @@ require 'polyamorous'
 
 Time.zone = 'Eastern Time (US & Canada)'
 
-Dir[File.expand_path('../{helpers,support,blueprints}/*.rb', __FILE__)].each do |f|
+Dir[File.expand_path('../{helpers,support,blueprints}/**/*.rb', __FILE__)].each do |f|
   require f
 end
 

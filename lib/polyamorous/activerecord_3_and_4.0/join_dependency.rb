@@ -1,6 +1,5 @@
 module Polyamorous
   module JoinDependencyExtensions
-
     def self.included(base)
       base.class_eval do
         alias_method_chain :build, :polymorphism
@@ -73,6 +72,5 @@ module Polyamorous
         JoinAssociation.new(reflection, self, parent)
       end
     end
-
   end
 end

@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "polyamorous"
 
   s.add_dependency 'activerecord', '>= 3.0'
-  s.add_development_dependency 'rspec', '~> 2.6.0'
+  s.add_development_dependency 'rspec', '~> 2.14.0'
   s.add_development_dependency 'machinist', '~> 1.0.6'
   s.add_development_dependency 'faker', '~> 0.9.5'
   s.add_development_dependency 'sqlite3', '~> 1.3.3'
