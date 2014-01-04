@@ -2,11 +2,12 @@
 
 Polyamorous is an extraction from MetaSearch 1.1.x, Ransack, and Squeel by [Ernie Miller](http://twitter.com/erniemiller).
 
-If you are using Rails 4.1, give the [Rails 4.1 branch](https://github.com/activerecord-hackery/polyamorous/tree/rails-4.1) a try. In your Gemfile:
+If you are using Polyamorous with Rails 4.1, you'll need the latest commits in the git repo that are not yet in the official gem release. In your Gemfile:
 
 ```ruby
-gem 'polyamorous', github: 'activerecord-hackery/polyamorous', branch: 'rails-4.1'
+gem 'polyamorous', github: 'activerecord-hackery/polyamorous'
 ```
+
 ## Copyright
 
 Copyright &copy; 2011-2014 [Ernie Miller](http://twitter.com/erniemiller)
