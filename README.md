@@ -7,3 +7,6 @@ If you are using Rails 4.1, give the [Rails 4.1 branch](https://github.com/activ
 ```ruby
 gem 'polyamorous', github: 'activerecord-hackery/polyamorous', branch: 'rails-4.1'
 ```
+## Copyright
+
+Copyright &copy; 2011-2014 [Ernie Miller](http://twitter.com/erniemiller)
