@@ -14,8 +14,14 @@ if defined?(::ActiveRecord)
   end
 
   require 'polyamorous/join'
-  require 'polyamorous/join_association'
-  require 'polyamorous/join_dependency'
+
+  if ActiveRecord::VERSION::STRING >= "4.1"
+    require 'polyamorous/activerecord_4.1/join_association'
+    require 'polyamorous/activerecord_4.1/join_dependency'
+  else
+    require 'polyamorous/activerecord_3_and_4.0/join_association'
+    require 'polyamorous/activerecord_3_and_4.0/join_dependency'
+  end
 
   Polyamorous::JoinDependency.send(:include, Polyamorous::JoinDependencyExtensions)
   Polyamorous::JoinAssociation.send(:include, Polyamorous::JoinAssociationExtensions)
