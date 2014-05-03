@@ -3,7 +3,7 @@ gemspec
 
 gem 'rake'
 
-rails = ENV['RAILS'] || 'master'
+rails = ENV['RAILS'] || '4-1-stable'
 
 case rails
 when /\// # A path
