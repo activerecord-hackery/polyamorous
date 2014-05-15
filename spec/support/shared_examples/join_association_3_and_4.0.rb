@@ -11,12 +11,12 @@ shared_examples "Join Association on ActiveRecord 3 and 4.0" do
   }
 
   it 'respects polymorphism on equality test' do
-    subject.should eq(
+    expect(subject).to eq(
       join_dependency.build_join_association_respecting_polymorphism(
         reflection, parent, Person
       )
     )
-    subject.should_not eq(
+    expect(subject).not_to eq(
       join_dependency.build_join_association_respecting_polymorphism(
         reflection, parent, Article
       )
@@ -26,14 +26,14 @@ shared_examples "Join Association on ActiveRecord 3 and 4.0" do
   it 'leaves the orginal reflection intact for thread safety' do
     reflection.instance_variable_set(:@klass, Article)
     join_association.swapping_reflection_klass(reflection, Person) do |new_reflection|
-      new_reflection.options.should_not equal reflection.options
-      new_reflection.options.should_not have_key(:polymorphic)
-      new_reflection.klass.should == Person
-      reflection.klass.should == Article
+      expect(new_reflection.options).not_to equal reflection.options
+      expect(new_reflection.options).not_to have_key(:polymorphic)
+      expect(new_reflection.klass).to eq(Person)
+      expect(reflection.klass).to eq(Article)
     end
   end
 
   it 'sets the polmorphic option to true after initializing' do
-    join_association.options[:polymorphic].should be_true
+    expect(join_association.options[:polymorphic]).to be_true
   end
 end
