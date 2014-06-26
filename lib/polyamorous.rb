@@ -2,6 +2,14 @@ require "polyamorous/version"
 
 if defined?(::ActiveRecord)
   module Polyamorous
+    if defined?(Arel::InnerJoin)
+      InnerJoin = Arel::InnerJoin
+      OuterJoin = Arel::OuterJoin
+    else
+      InnerJoin = Arel::Nodes::InnerJoin
+      OuterJoin = Arel::Nodes::OuterJoin
+    end
+
     if defined?(::ActiveRecord::Associations::JoinDependency)
       JoinDependency  = ::ActiveRecord::Associations::JoinDependency
       JoinAssociation = ::ActiveRecord::Associations::JoinDependency::JoinAssociation

@@ -3,7 +3,7 @@ module Polyamorous
     attr_accessor :name
     attr_reader :type, :klass
 
-    def initialize(name, type = Arel::InnerJoin, klass = nil)
+    def initialize(name, type = InnerJoin, klass = nil)
       @name = name
       @type = convert_to_arel_join_type(type)
       @klass = convert_to_class(klass) if klass
@@ -35,11 +35,11 @@ module Polyamorous
     def convert_to_arel_join_type(type)
       case type
       when 'inner', :inner
-        Arel::InnerJoin
+        InnerJoin
       when 'outer', :outer
-        Arel::OuterJoin
+        OuterJoin
       when Class
-        if [Arel::InnerJoin, Arel::OuterJoin].include? type
+        if [InnerJoin, OuterJoin].include? type
           type
         else
           raise ArgumentError, "#{type} cannot be converted to an ARel join type"
