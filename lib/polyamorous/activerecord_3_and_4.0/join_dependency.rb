@@ -45,7 +45,7 @@ module Polyamorous
       end
     end
 
-    def build_with_polymorphism(associations, parent = nil, join_type = Arel::InnerJoin)
+    def build_with_polymorphism(associations, parent = nil, join_type = InnerJoin)
       case associations
       when Join
         parent ||= _join_parts.last

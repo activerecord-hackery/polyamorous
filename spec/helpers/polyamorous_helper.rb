@@ -13,7 +13,7 @@ module PolyamorousHelper
     Polyamorous::JoinDependency.new klass, associations, []
   end
 
-  def new_join(name, type = Arel::InnerJoin, klass = nil)
+  def new_join(name, type = Polyamorous::InnerJoin, klass = nil)
     Polyamorous::Join.new name, type, klass
   end
 
