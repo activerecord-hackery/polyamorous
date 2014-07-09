@@ -2,6 +2,7 @@ module Polyamorous
   module JoinAssociationExtensions
     def self.included(base)
       base.class_eval do
+        attr_reader :join_type
         alias_method_chain :initialize, :polymorphism
         if base.method_defined?(:active_record)
           alias_method :base_klass, :active_record
@@ -15,7 +16,8 @@ module Polyamorous
       end
     end
 
-    def initialize_with_polymorphism(reflection, children, polymorphic_class = nil)
+    def initialize_with_polymorphism(reflection, children, polymorphic_class = nil, join_type = Arel::Nodes::InnerJoin)
+      @join_type = join_type
       if polymorphic_class && ::ActiveRecord::Base > polymorphic_class
         swapping_reflection_klass(reflection, polymorphic_class) do |reflection|
           initialize_without_polymorphism(reflection, children)
