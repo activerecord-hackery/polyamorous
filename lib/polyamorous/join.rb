@@ -1,5 +1,7 @@
 module Polyamorous
   class Join
+    include TreeNode
+
     attr_accessor :name
     attr_reader :type, :klass
 
@@ -29,6 +31,10 @@ module Polyamorous
     end
 
     alias :== :eql?
+
+    def add_to_tree(hash)
+      hash[self] ||= {}
+    end
 
     private
 

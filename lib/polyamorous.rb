@@ -21,9 +21,13 @@ if defined?(::ActiveRecord)
     end
   end
 
+  require 'polyamorous/tree_node'
   require 'polyamorous/join'
 
-  if ActiveRecord::VERSION::STRING >= "4.1"
+  if ActiveRecord::VERSION::STRING >= "4.2"
+    require 'polyamorous/activerecord_4.1/join_association'
+    require 'polyamorous/activerecord_4.2/join_dependency'
+  elsif ActiveRecord::VERSION::STRING >= "4.1"
     require 'polyamorous/activerecord_4.1/join_association'
     require 'polyamorous/activerecord_4.1/join_dependency'
   else
