@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Polyamorous::VERSION
   s.authors     = ["Ernie Miller", "Ryan Bigg", "Jon Atack", "Xiang Li"]
   s.email       = ["ernie@erniemiller.org", "radarlistener@gmail.com", "jonnyatack@gmail.com", "bigxiang@gmail.com"]
-  s.homepage    = "http://github.com/ernie/polyamorous"
+  s.homepage    = "https://github.com/activerecord-hackery/polyamorous"
   s.summary     = %q{
     Loves/is loved by polymorphic belongs_to associations, Ransack, Squeel, MetaSearch...
   }
