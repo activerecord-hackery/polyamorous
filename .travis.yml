@@ -15,9 +15,9 @@ env:
   - RAILS=master AREL=master DB=mysql
   - RAILS=master AREL=master DB=postgres
 
-  - RAILS=4-2-stable AREL=5-0-stable DB=sqlite
-  - RAILS=4-2-stable AREL=5-0-stable DB=mysql
-  - RAILS=4-2-stable AREL=5-0-stable DB=postgres
+  - RAILS=4-2-stable AREL=6-0-stable DB=sqlite
+  - RAILS=4-2-stable AREL=6-0-stable DB=mysql
+  - RAILS=4-2-stable AREL=6-0-stable DB=postgres
 
   - RAILS=4-1-stable AREL=5-0-stable DB=sqlite
   - RAILS=4-1-stable AREL=5-0-stable DB=mysql
