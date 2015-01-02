@@ -6,6 +6,7 @@ before_install:
   - travis_retry gem install bundler
 
 rvm:
+  - 2.2
   - 2.1
   - 2.0
   - 1.9
