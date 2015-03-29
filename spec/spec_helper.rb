@@ -20,7 +20,13 @@ Sham.define do
 end
 
 RSpec.configure do |config|
-  config.before(:suite) { Schema.create }
+  config.before(:suite) do
+    connection_name = ActiveRecord::Base.connection.adapter_name
+    message = "Running specs against #{connection_name}, Active Record #{
+    ::ActiveRecord::VERSION::STRING} and Arel #{Arel::VERSION}..."
+     puts '=' * message.length, message, '=' * message.length
+    Schema.create
+  end
   config.before(:all)   { Sham.reset(:before_all) }
   config.before(:each)  { Sham.reset(:before_each) }
 
