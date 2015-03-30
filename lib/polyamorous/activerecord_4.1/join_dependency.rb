@@ -22,20 +22,27 @@ module Polyamorous
         if name.is_a? Join
           reflection = find_reflection base_klass, name.name
           reflection.check_validity!
-
           if reflection.options[:polymorphic]
-            JoinAssociation.new reflection, build(right, name.klass || base_klass), name.klass, name.type
+            JoinAssociation.new(
+              reflection,
+              build(right, name.klass || base_klass),
+              name.klass,
+              name.type
+              )
           else
-            JoinAssociation.new reflection, build(right, reflection.klass), name.klass, name.type
+            JoinAssociation.new(
+              reflection,
+              build(right, reflection.klass),
+              name.klass,
+              name.type
+              )
           end
         else
           reflection = find_reflection base_klass, name
           reflection.check_validity!
-
           if reflection.options[:polymorphic]
             raise ActiveRecord::EagerLoadPolymorphicError.new(reflection)
           end
-
           JoinAssociation.new reflection, build(right, reflection.klass)
         end
       end
@@ -51,7 +58,9 @@ module Polyamorous
       end
     end
 
-    def build_join_association_respecting_polymorphism(reflection, parent, klass)
+    def build_join_association_respecting_polymorphism(
+      reflection, parent, klass
+      )
       if reflection.options[:polymorphic] && klass
         JoinAssociation.new(reflection, self, klass)
       else
@@ -60,26 +69,29 @@ module Polyamorous
     end
 
     def join_constraints_with_polymorphism(outer_joins)
-      joins = join_root.children.flat_map { |child|
-        make_joins join_root, child
-      }
-
-      joins.concat outer_joins.flat_map { |oj|
-        if join_root.match? oj.join_root
-          walk join_root, oj.join_root
-        else
-          oj.join_root.children.flat_map { |child|
-            make_outer_joins oj.join_root, child
-          }
+      joins = join_root
+              .children.flat_map { |child| make_joins(join_root, child) }
+      joins.concat(
+        outer_joins.flat_map do |oj|
+          if join_root.match? oj.join_root
+            walk(join_root, oj.join_root)
+          else
+            oj.join_root
+            .children.flat_map { |child| make_outer_joins(oj.join_root, child) }
+          end
         end
-      }
+      )
     end
 
     def make_joins(parent, child)
-      tables    = child.tables
-      joins     = make_constraints parent, child, tables, child.join_type || Arel::Nodes::InnerJoin
-
-      joins.concat child.children.flat_map { |c| make_joins(child, c) }
+      tables = child.tables
+      joins = make_constraints(
+        parent,
+        child,
+        tables,
+        child.join_type || Arel::Nodes::InnerJoin
+        )
+      joins.concat(child.children.flat_map { |c| make_joins(child, c) })
     end
 
     private :make_joins

@@ -45,14 +45,18 @@ module Polyamorous
       end
     end
 
-    def build_with_polymorphism(associations, parent = nil, join_type = InnerJoin)
+    def build_with_polymorphism(
+      associations,
+      parent = nil,
+      join_type = InnerJoin
+      )
       case associations
       when Join
         parent ||= _join_parts.last
         reflection = parent.reflections[associations.name] or
           raise ::ActiveRecord::ConfigurationError,
             "Association named '#{associations.name
-              }' was not found; perhaps you misspelled it?"
+            }' was not found; perhaps you misspelled it?"
 
         unless join_association = find_join_association_respecting_polymorphism(
           reflection, parent, associations.klass
@@ -82,7 +86,9 @@ module Polyamorous
       end
     end
 
-    def build_join_association_respecting_polymorphism(reflection, parent, klass)
+    def build_join_association_respecting_polymorphism(
+      reflection, parent, klass
+      )
       if reflection.options[:polymorphic] && klass
         JoinAssociation.new(reflection, self, parent, klass)
       else
