@@ -8,13 +8,8 @@ module Polyamorous
         class << self
           alias_method_chain :walk_tree, :polymorphism
         end
-
         alias_method_chain :build, :polymorphism
         alias_method_chain :join_constraints, :polymorphism
-
-        if base.method_defined?(:active_record)
-          alias_method :base_klass, :active_record
-        end
       end
     end
 

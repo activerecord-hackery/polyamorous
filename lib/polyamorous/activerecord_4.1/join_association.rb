@@ -5,15 +5,7 @@ module Polyamorous
       base.class_eval do
         attr_reader :join_type
         alias_method_chain :initialize, :polymorphism
-        if base.method_defined?(:active_record)
-          alias_method :base_klass, :active_record
-        end
-
-        if ActiveRecord::VERSION::STRING =~ /^3\.0\./
-          alias_method_chain :association_join, :polymorphism
-        else
-          alias_method_chain :build_constraint, :polymorphism
-        end
+        alias_method_chain :build_constraint, :polymorphism
       end
     end
 
