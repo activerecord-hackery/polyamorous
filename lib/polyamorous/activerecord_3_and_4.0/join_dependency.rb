@@ -1,3 +1,4 @@
+# active_record_3_and_4.0/join_dependency.rb
 module Polyamorous
   module JoinDependencyExtensions
     def self.included(base)
@@ -46,10 +47,8 @@ module Polyamorous
     end
 
     def build_with_polymorphism(
-      associations,
-      parent = nil,
-      join_type = InnerJoin
-      )
+      associations, parent = nil, join_type = InnerJoin
+    )
       case associations
       when Join
         parent ||= _join_parts.last
@@ -60,11 +59,11 @@ module Polyamorous
 
         unless join_association = find_join_association_respecting_polymorphism(
           reflection, parent, associations.klass
-          )
+        )
           @reflections << reflection
           join_association = build_join_association_respecting_polymorphism(
             reflection, parent, associations.klass
-            )
+          )
           join_association.join_type = associations.type
           _join_parts << join_association
           cache_joined_association(join_association)
@@ -86,9 +85,7 @@ module Polyamorous
       end
     end
 
-    def build_join_association_respecting_polymorphism(
-      reflection, parent, klass
-      )
+    def build_join_association_respecting_polymorphism(reflection, parent, klass)
       if reflection.options[:polymorphic] && klass
         JoinAssociation.new(reflection, self, parent, klass)
       else

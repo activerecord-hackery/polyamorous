@@ -1,3 +1,4 @@
+# active_record_4.1/join_dependency.rb
 module Polyamorous
   module JoinDependencyExtensions
     def self.included(base)
@@ -28,14 +29,14 @@ module Polyamorous
               build(right, name.klass || base_klass),
               name.klass,
               name.type
-              )
+            )
           else
             JoinAssociation.new(
               reflection,
               build(right, reflection.klass),
               name.klass,
               name.type
-              )
+            )
           end
         else
           reflection = find_reflection base_klass, name
@@ -58,9 +59,7 @@ module Polyamorous
       end
     end
 
-    def build_join_association_respecting_polymorphism(
-      reflection, parent, klass
-      )
+    def build_join_association_respecting_polymorphism(reflection, parent, klass)
       if reflection.options[:polymorphic] && klass
         JoinAssociation.new(reflection, self, klass)
       else
@@ -90,7 +89,7 @@ module Polyamorous
         child,
         tables,
         child.join_type || Arel::Nodes::InnerJoin
-        )
+      )
       joins.concat(child.children.flat_map { |c| make_joins(child, c) })
     end
 
@@ -104,13 +103,12 @@ module Polyamorous
         when Hash
           associations.each do |k, v|
             cache =
-              case k
-                when TreeNode
-                  k.add_to_tree(hash)
-                else
-                  hash[k] ||= {}
-                end
-
+            case k
+            when TreeNode
+              k.add_to_tree(hash)
+            else
+              hash[k] ||= {}
+            end
             walk_tree(v, cache)
           end
         else

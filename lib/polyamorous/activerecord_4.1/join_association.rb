@@ -1,3 +1,4 @@
+# active_record_4.1/join_association.rb
 module Polyamorous
   module JoinAssociationExtensions
     def self.included(base)
@@ -17,11 +18,9 @@ module Polyamorous
     end
 
     def initialize_with_polymorphism(
-      reflection,
-      children,
-      polymorphic_class = nil,
+      reflection, children, polymorphic_class = nil,
       join_type = Arel::Nodes::InnerJoin
-      )
+    )
       @join_type = join_type
       if polymorphic_class && ::ActiveRecord::Base > polymorphic_class
         swapping_reflection_klass(reflection, polymorphic_class) do |reflection|
@@ -47,33 +46,40 @@ module Polyamorous
       base_klass == other.base_klass
     end
 
-    def build_constraint_with_polymorphism(klass, table, key, foreign_table, foreign_key)
+    def build_constraint_with_polymorphism(
+      klass, table, key, foreign_table, foreign_key
+    )
       if reflection.options[:polymorphic]
-        build_constraint_without_polymorphism(klass, table, key, foreign_table, foreign_key).and(
-          foreign_table[reflection.foreign_type].eq(reflection.klass.name)
+        build_constraint_without_polymorphism(
+          klass, table, key, foreign_table, foreign_key
         )
+        .and(foreign_table[reflection.foreign_type].eq(reflection.klass.name))
       else
-        build_constraint_without_polymorphism(klass, table, key, foreign_table, foreign_key)
+        build_constraint_without_polymorphism(
+          klass, table, key, foreign_table, foreign_key
+        )
       end
     end
 
     def association_join_with_polymorphism
       return @join if @Join
-
       @join = association_join_without_polymorphism
-
       if reflection.macro == :belongs_to && reflection.options[:polymorphic]
-        aliased_table = Arel::Table.new(table_name, :as      => @aliased_table_name,
-                                                    :engine  => arel_engine,
-                                                    :columns => klass.columns)
-
-        parent_table = Arel::Table.new(parent.table_name, :as      => parent.aliased_table_name,
-                                                          :engine  => arel_engine,
-                                                          :columns => parent.base_klass.columns)
-
-        @join << parent_table[reflection.options[:foreign_type]].eq(reflection.klass.name)
+        aliased_table = Arel::Table.new(
+          table_name,
+          as: @aliased_table_name,
+          engine: arel_engine,
+          columns: klass.columns
+        )
+        parent_table = Arel::Table.new(
+          parent.table_name,
+          as: parent.aliased_table_name,
+          engine: arel_engine,
+          columns: parent.base_klass.columns
+        )
+        @join << parent_table[reflection.options[:foreign_type]]
+                 .eq(reflection.klass.name)
       end
-
       @join
     end
   end

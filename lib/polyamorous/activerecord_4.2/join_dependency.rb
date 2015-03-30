@@ -1,3 +1,4 @@
+# active_record_4.2/join_dependency.rb
 require 'polyamorous/activerecord_4.1/join_dependency'
 
 module Polyamorous
@@ -9,7 +10,7 @@ module Polyamorous
         child,
         tables,
         child.join_type || Arel::Nodes::InnerJoin
-        )
+      )
       [info] + child.children.flat_map { |c| make_joins(child, c) }
     end
   end
