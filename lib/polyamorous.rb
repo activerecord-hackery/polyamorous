@@ -1,4 +1,4 @@
-require "polyamorous/version"
+require 'polyamorous/version'
 
 if defined?(::ActiveRecord)
   module Polyamorous
@@ -24,10 +24,12 @@ if defined?(::ActiveRecord)
   require 'polyamorous/tree_node'
   require 'polyamorous/join'
 
-  if ActiveRecord::VERSION::STRING >= "4.2"
+  active_record_version = ActiveRecord::VERSION::STRING
+
+  if active_record_version >= '4.2'
     require 'polyamorous/activerecord_4.1/join_association'
     require 'polyamorous/activerecord_4.2/join_dependency'
-  elsif ActiveRecord::VERSION::STRING >= "4.1"
+  elsif active_record_version >= '4.1'
     require 'polyamorous/activerecord_4.1/join_association'
     require 'polyamorous/activerecord_4.1/join_dependency'
   else
