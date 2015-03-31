@@ -21,10 +21,11 @@ end
 
 RSpec.configure do |config|
   config.before(:suite) do
-    connection_name = ActiveRecord::Base.connection.adapter_name
-    message = "Running specs against #{connection_name}, Active Record #{
-    ::ActiveRecord::VERSION::STRING} and Arel #{Arel::VERSION}..."
-     puts '=' * message.length, message, '=' * message.length
+    message = "Running specs with #{ActiveRecord::Base.connection.adapter_name
+      }, Active Record #{::ActiveRecord::VERSION::STRING}, Arel #{Arel::VERSION
+      } and Ruby #{RUBY_VERSION}"
+    line = '=' * message.length
+    puts line, message, line
     Schema.create
   end
   config.before(:all)   { Sham.reset(:before_all) }
