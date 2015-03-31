@@ -3,13 +3,17 @@ module Polyamorous
   module JoinDependencyExtensions
     def self.included(base)
       base.extend ClassMethods
-
       base.class_eval do
         class << self
-          alias_method_chain :walk_tree, :polymorphism
+          alias_method :walk_tree_without_polymorphism, :walk_tree
+          alias_method :walk_tree, :walk_tree_with_polymorphism
         end
-        alias_method_chain :build, :polymorphism
-        alias_method_chain :join_constraints, :polymorphism
+
+        alias_method :build_without_polymorphism, :build
+        alias_method :build, :build_with_polymorphism
+
+        alias_method :join_constraints_without_polymorphism, :join_constraints
+        alias_method :join_constraints, :join_constraints_with_polymorphism
       end
     end
 

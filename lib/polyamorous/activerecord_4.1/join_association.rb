@@ -4,8 +4,12 @@ module Polyamorous
     def self.included(base)
       base.class_eval do
         attr_reader :join_type
-        alias_method_chain :initialize, :polymorphism
-        alias_method_chain :build_constraint, :polymorphism
+
+        alias_method :initialize_without_polymorphism, :initialize
+        alias_method :initialize, :initialize_with_polymorphism
+
+        alias_method :build_constraint_without_polymorphism, :build_constraint
+        alias_method :build_constraint, :build_constraint_with_polymorphism
       end
     end
 
