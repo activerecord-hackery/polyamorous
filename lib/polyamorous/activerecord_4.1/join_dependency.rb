@@ -1,4 +1,6 @@
 # active_record_4.1/join_dependency.rb
+require 'polyamorous/activerecord_4.2/join_dependency'
+
 module Polyamorous
   module JoinDependencyExtensions
     def self.included(base)
@@ -48,24 +50,6 @@ module Polyamorous
       end
     end
 
-    def find_join_association_respecting_polymorphism(reflection, parent, klass)
-      if association = parent.children.find { |j| j.reflection == reflection }
-        unless reflection.options[:polymorphic]
-          association
-        else
-          association if association.base_klass == klass
-        end
-      end
-    end
-
-    def build_join_association_respecting_polymorphism(reflection, parent, klass)
-      if reflection.options[:polymorphic] && klass
-        JoinAssociation.new(reflection, self, klass)
-      else
-        JoinAssociation.new(reflection, self)
-      end
-    end
-
     def join_constraints_with_polymorphism(outer_joins)
       joins = join_root
               .children.flat_map { |child| make_joins(join_root, child) }
@@ -80,19 +64,6 @@ module Polyamorous
         end
       )
     end
-
-    def make_joins(parent, child)
-      tables = child.tables
-      joins = make_constraints(
-        parent,
-        child,
-        tables,
-        child.join_type || Arel::Nodes::InnerJoin
-      )
-      joins.concat(child.children.flat_map { |c| make_joins(child, c) })
-    end
-
-    private :make_joins
 
     module ClassMethods
       def walk_tree_with_polymorphism(associations, hash)
