@@ -1,6 +1,8 @@
 # active_record_4.2/join_dependency.rb
 module Polyamorous
   module JoinDependencyExtensions
+
+    # Replaces ActiveRecord::Associations::JoinDependency#build
     def build(associations, base_klass)
       associations.map do |name, right|
         if name.is_a? Join
@@ -50,6 +52,7 @@ module Polyamorous
       end
     end
 
+    # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
     def join_constraints(outer_joins)
       joins = join_root.children.flat_map { |child|
         make_joins(join_root, child)
@@ -65,6 +68,7 @@ module Polyamorous
       }
     end
 
+    # Replaces ActiveRecord::Associations::JoinDependency#make_inner_joins
     def make_joins(parent, child)
       tables = child.tables
       joins = make_constraints(
@@ -76,6 +80,7 @@ module Polyamorous
     private :make_joins
 
     module ClassMethods
+    # Replaces ActiveRecord::Associations::JoinDependency#self.walk_tree
       def walk_tree(associations, hash)
         case associations
         when TreeNode
