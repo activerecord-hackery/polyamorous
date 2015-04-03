@@ -26,12 +26,15 @@ if defined?(::ActiveRecord)
 
   active_record_version = ActiveRecord::VERSION::STRING
 
-  if defined?(Module.prepend) && active_record_version >= '4.1'
+  if RUBY_VERSION >= '2.0' && active_record_version >= '4.1'
     require 'polyamorous/activerecord_4.2/join_association'
     require 'polyamorous/activerecord_4.2/join_dependency'
-    Polyamorous::JoinDependency.prepend(Polyamorous::JoinDependencyExtensions)
-    Polyamorous::JoinDependency.singleton_class.prepend(Polyamorous::JoinDependencyExtensions::ClassMethods)
-    Polyamorous::JoinAssociation.prepend(Polyamorous::JoinAssociationExtensions)
+    Polyamorous::JoinDependency
+      .send(:prepend, Polyamorous::JoinDependencyExtensions)
+    Polyamorous::JoinDependency.singleton_class
+      .send(:prepend, Polyamorous::JoinDependencyExtensions::ClassMethods)
+    Polyamorous::JoinAssociation
+      .send(:prepend, Polyamorous::JoinAssociationExtensions)
   else
     if active_record_version >= '4.1'
       require 'polyamorous/activerecord_4.1/join_association'
@@ -40,8 +43,10 @@ if defined?(::ActiveRecord)
       require 'polyamorous/activerecord_3_and_4.0/join_association'
       require 'polyamorous/activerecord_3_and_4.0/join_dependency'
     end
-    Polyamorous::JoinDependency.send(:include, Polyamorous::JoinDependencyExtensions)
-    Polyamorous::JoinAssociation.send(:include, Polyamorous::JoinAssociationExtensions)
+    Polyamorous::JoinDependency
+      .send(:include, Polyamorous::JoinDependencyExtensions)
+    Polyamorous::JoinAssociation
+      .send(:include, Polyamorous::JoinAssociationExtensions)
   end
 
   Polyamorous::JoinBase.class_eval do
