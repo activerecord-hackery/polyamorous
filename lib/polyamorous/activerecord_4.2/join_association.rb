@@ -1,7 +1,7 @@
 # active_record_4.2/join_association.rb
 module Polyamorous
   module JoinAssociationExtensions
-    def self.included(base)
+    def self.prepended(base)
       base.class_eval do
         attr_reader :join_type
       end
