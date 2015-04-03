@@ -24,7 +24,7 @@ module Polyamorous
         if name.is_a? Join
           reflection = find_reflection base_klass, name.name
           reflection.check_validity!
-          if reflection.options[:polymorphic]
+          if reflection.polymorphic?
             JoinAssociation.new(
               reflection,
               build(right, name.klass || base_klass),
@@ -42,7 +42,7 @@ module Polyamorous
         else
           reflection = find_reflection base_klass, name
           reflection.check_validity!
-          if reflection.options[:polymorphic]
+          if reflection.polymorphic?
             raise ActiveRecord::EagerLoadPolymorphicError.new(reflection)
           end
           JoinAssociation.new reflection, build(right, reflection.klass)
@@ -86,5 +86,6 @@ module Polyamorous
         end
       end
     end
+
   end
 end

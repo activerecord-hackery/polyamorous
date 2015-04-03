@@ -39,7 +39,7 @@ module Polyamorous
     end
 
     def build_constraint(klass, table, key, foreign_table, foreign_key)
-      if reflection.options[:polymorphic]
+      if reflection.polymorphic?
         super(klass, table, key, foreign_table, foreign_key)
         .and(foreign_table[reflection.foreign_type].eq(reflection.klass.name))
       else
@@ -50,7 +50,7 @@ module Polyamorous
     def association_join_with_polymorphism
       return @join if @Join
       @join = association_join_without_polymorphism
-      if reflection.macro == :belongs_to && reflection.options[:polymorphic]
+      if reflection.macro == :belongs_to && reflection.polymorphic?
         aliased_table = Arel::Table.new(
           table_name,
           as: @aliased_table_name,
