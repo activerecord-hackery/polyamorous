@@ -8,7 +8,9 @@ module Polyamorous
     end
 
     def initialize(
-      reflection, children, polymorphic_class = nil,
+      reflection,
+      children,
+      polymorphic_class = nil,
       join_type = Arel::Nodes::InnerJoin
     )
       @join_type = join_type
@@ -36,9 +38,7 @@ module Polyamorous
       base_klass == other.base_klass
     end
 
-    def build_constraint(
-      klass, table, key, foreign_table, foreign_key
-    )
+    def build_constraint(klass, table, key, foreign_table, foreign_key)
       if reflection.options[:polymorphic]
         super(klass, table, key, foreign_table, foreign_key)
         .and(foreign_table[reflection.foreign_type].eq(reflection.klass.name))

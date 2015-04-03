@@ -14,7 +14,9 @@ module Polyamorous
     end
 
     def initialize_with_polymorphism(
-      reflection, children, polymorphic_class = nil,
+      reflection,
+      children,
+      polymorphic_class = nil,
       join_type = Arel::Nodes::InnerJoin
     )
       @join_type = join_type

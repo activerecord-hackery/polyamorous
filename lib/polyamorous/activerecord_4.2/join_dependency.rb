@@ -51,18 +51,18 @@ module Polyamorous
     end
 
     def join_constraints(outer_joins)
-      joins = join_root
-        .children.flat_map { |child| make_joins(join_root, child) }
-      joins.concat(
-        outer_joins.flat_map do |oj|
-          if join_root.match? oj.join_root
-            walk(join_root, oj.join_root)
-          else
-            oj.join_root
-            .children.flat_map { |child| make_outer_joins(oj.join_root, child) }
-          end
+      joins = join_root.children.flat_map { |child|
+        make_joins(join_root, child)
+      }
+      joins.concat outer_joins.flat_map { |oj|
+        if join_root.match? oj.join_root
+          walk(join_root, oj.join_root)
+        else
+          oj.join_root.children.flat_map { |child|
+            make_outer_joins(oj.join_root, child)
+          }
         end
-      )
+      }
     end
 
     def make_joins(parent, child)
