@@ -23,6 +23,11 @@ module Polyamorous
       end
     end
 
+    # Reference https://github.com/rails/rails/commit/9b15db51b78028bfecdb85595624de4b838adbd1
+    def ==(other)
+      base_klass == other.base_klass
+    end
+
     def build_constraint_with_polymorphism(
       klass, table, key, foreign_table, foreign_key
     )
