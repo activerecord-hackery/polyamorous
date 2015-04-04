@@ -23,31 +23,37 @@ if defined?(::ActiveRecord)
 
   require 'polyamorous/tree_node'
   require 'polyamorous/join'
+  require 'polyamorous/swapping_reflection_class'
 
-  active_record_version = ActiveRecord::VERSION::STRING
-
-  if RUBY_VERSION >= '2.0' && active_record_version >= '4.1'
-    require 'polyamorous/activerecord_4.2/join_association'
-    require 'polyamorous/activerecord_4.2/join_dependency'
-    Polyamorous::JoinDependency
-      .send(:prepend, Polyamorous::JoinDependencyExtensions)
-    Polyamorous::JoinDependency.singleton_class
-      .send(:prepend, Polyamorous::JoinDependencyExtensions::ClassMethods)
-    Polyamorous::JoinAssociation
-      .send(:prepend, Polyamorous::JoinAssociationExtensions)
-  else
-    if active_record_version >= '4.1'
-      require 'polyamorous/activerecord_4.1/join_association'
-      require 'polyamorous/activerecord_4.1/join_dependency'
+  ar_version =
+    case ::ActiveRecord::VERSION::STRING[0,3]
+    when '4.2', '5.0'
+      '4.2'
+    when '4.1'
+      '4.1'
     else
-      require 'polyamorous/activerecord_3_and_4.0/join_association'
-      require 'polyamorous/activerecord_3_and_4.0/join_dependency'
+      '3_and_4.0'
     end
-    Polyamorous::JoinDependency
-      .send(:include, Polyamorous::JoinDependencyExtensions)
-    Polyamorous::JoinAssociation
-      .send(:include, Polyamorous::JoinAssociationExtensions)
+
+  method, ruby_version =
+    if RUBY_VERSION >= '2.0' && ar_version >= '4.1'
+      # Ruby 2; we can use `prepend` to patch Active Record cleanly.
+      [:prepend, '2']
+    else
+      # Ruby 1.9; we must use `alias_method` to patch Active Record.
+      [:include, '1.9']
+    end
+
+  %w(join_association join_dependency).each do |file|
+    require "polyamorous/activerecord_#{ar_version}_ruby_#{ruby_version}/#{file}"
   end
+
+  Polyamorous::JoinDependency.send(method, Polyamorous::JoinDependencyExtensions)
+  if method == :prepend
+    Polyamorous::JoinDependency.singleton_class
+    .send(:prepend, Polyamorous::JoinDependencyExtensions::ClassMethods)
+  end
+  Polyamorous::JoinAssociation.send(method, Polyamorous::JoinAssociationExtensions)
 
   Polyamorous::JoinBase.class_eval do
     if method_defined?(:active_record)

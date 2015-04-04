@@ -1,6 +1,7 @@
-# active_record_3_and_4.0/join_association.rb
+# active_record_3_and_4.0_ruby_2/join_association.rb
 module Polyamorous
   module JoinAssociationExtensions
+    include SwappingReflectionClass
     def self.included(base)
       base.class_eval do
         alias_method_chain :initialize, :polymorphism
@@ -29,14 +30,6 @@ module Polyamorous
       else
         initialize_without_polymorphism(reflection, join_dependency, parent)
       end
-    end
-
-    def swapping_reflection_klass(reflection, klass)
-      new_reflection = reflection.clone
-      new_reflection.instance_variable_set(:@options, reflection.options.clone)
-      new_reflection.options.delete(:polymorphic)
-      new_reflection.instance_variable_set(:@klass, klass)
-      yield new_reflection
     end
 
     def equality_with_polymorphism(other)

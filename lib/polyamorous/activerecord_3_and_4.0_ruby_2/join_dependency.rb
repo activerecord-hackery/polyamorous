@@ -1,4 +1,4 @@
-# active_record_3_and_4.0/join_dependency.rb
+# active_record_3_and_4.0_ruby_2/join_dependency.rb
 module Polyamorous
   module JoinDependencyExtensions
     def self.included(base)
