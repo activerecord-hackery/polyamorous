@@ -21,7 +21,8 @@ end
 
 RSpec.configure do |config|
   config.before(:suite) do
-    message = "Running specs with #{ActiveRecord::Base.connection.adapter_name
+    message = "Running Polyamorous specs with #{
+      ActiveRecord::Base.connection.adapter_name
       }, Active Record #{::ActiveRecord::VERSION::STRING}, Arel #{Arel::VERSION
       } and Ruby #{RUBY_VERSION}"
     line = '=' * message.length
