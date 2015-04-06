@@ -7,21 +7,12 @@ module Polyamorous
         if name.is_a? Join
           reflection = find_reflection base_klass, name.name
           reflection.check_validity!
-          if reflection.polymorphic?
-            JoinAssociation.new(
-              reflection,
-              build(right, name.klass || base_klass),
-              name.klass,
-              name.type
-            )
+          klass = if reflection.polymorphic?
+            name.klass || base_klass
           else
-            JoinAssociation.new(
-              reflection,
-              build(right, reflection.klass),
-              name.klass,
-              name.type
-            )
+            reflection.klass
           end
+          JoinAssociation.new(reflection, build(right, klass), name.klass, name.type)
         else
           reflection = find_reflection base_klass, name
           reflection.check_validity!
@@ -82,20 +73,8 @@ module Polyamorous
     module ClassMethods
     # Prepended before ActiveRecord::Associations::JoinDependency#self.walk_tree
       def walk_tree(associations, hash)
-        case associations
-        when TreeNode
+        if TreeNode === associations
           associations.add_to_tree(hash)
-        when Hash
-          associations.each do |k, v|
-            cache =
-              case k
-              when TreeNode
-                k.add_to_tree(hash)
-              else
-                hash[k] ||= {}
-              end
-            walk_tree(v, cache)
-          end
         else
           super(associations, hash)
         end
