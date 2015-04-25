@@ -7,7 +7,7 @@ module Polyamorous
       expect(join).to be_kind_of(TreeNode)
     end
 
-    it 'can be add to a tree' do
+    it 'can be added to a tree' do
       join = new_join(:articles, :outer)
 
       tree_hash = {}
