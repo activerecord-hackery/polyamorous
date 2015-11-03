@@ -48,10 +48,15 @@ module Polyamorous
     # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
     # in order to call #make_joins instead of #make_inner_joins.
     #
-    def join_constraints(outer_joins)
+    def join_constraints(outer_joins, join_type)
       joins = join_root.children.flat_map { |child|
-        make_joins(join_root, child)
+        if join_type == Arel::Nodes::OuterJoin
+          make_left_outer_joins join_root, child
+        else
+          make_joins join_root, child
+        end
       }
+
       joins.concat outer_joins.flat_map { |oj|
         if join_root.match? oj.join_root
           walk(join_root, oj.join_root)
