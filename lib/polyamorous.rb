@@ -26,11 +26,8 @@ if defined?(::ActiveRecord)
   require 'polyamorous/swapping_reflection_class'
 
   ar_version =
-    case ::ActiveRecord::VERSION::STRING[0,3]
-    when '4.2', '5.0'
-      '4.2'
-    when '4.1'
-      '4.1'
+    if ::ActiveRecord::VERSION::MAJOR > 3
+      ::ActiveRecord::VERSION::STRING[0,3]
     else
       '3_and_4.0'
     end
