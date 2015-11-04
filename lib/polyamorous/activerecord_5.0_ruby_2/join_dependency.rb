@@ -48,6 +48,10 @@ module Polyamorous
     # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
     # in order to call #make_joins instead of #make_inner_joins.
     #
+    # This internal method was changed in Rails 5.0 by commit
+    # https://github.com/rails/rails/commit/e038975
+    # which added left_outer_joins and passing `join_type` to the method.
+    #
     def join_constraints(outer_joins, join_type)
       joins = join_root.children.flat_map { |child|
         if join_type == Arel::Nodes::OuterJoin
