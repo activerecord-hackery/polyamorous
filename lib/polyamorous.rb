@@ -25,12 +25,8 @@ if defined?(::ActiveRecord)
   require 'polyamorous/join'
   require 'polyamorous/swapping_reflection_class'
 
-  ar_version =
-    if ::ActiveRecord::VERSION::MAJOR > 3
-      ::ActiveRecord::VERSION::STRING[0,3]
-    else
-      '3_and_4.0'
-    end
+  ar_version = ::ActiveRecord::VERSION::STRING[0,3]
+  ar_version = '3_and_4.0' if ar_version < '4.1'
 
   method, ruby_version =
     if RUBY_VERSION >= '2.0' && ar_version >= '4.1'
