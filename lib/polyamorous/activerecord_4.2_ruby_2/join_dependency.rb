@@ -3,13 +3,12 @@ require 'polyamorous/activerecord_5.0_ruby_2/join_dependency'
 
 module Polyamorous
   module JoinDependencyExtensions
-
     # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
-    # in order to call #make_joins instead of #make_inner_joins.
+    # to call #make_polyamorous_inner_joins instead of #make_inner_joins.
     #
     def join_constraints(outer_joins)
       joins = join_root.children.flat_map { |child|
-        make_joins(join_root, child)
+        make_polyamorous_inner_joins join_root, child
       }
       joins.concat outer_joins.flat_map { |oj|
         if join_root.match? oj.join_root
@@ -21,6 +20,5 @@ module Polyamorous
         end
       }
     end
-
   end
 end

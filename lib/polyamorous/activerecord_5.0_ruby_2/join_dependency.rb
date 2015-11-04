@@ -45,8 +45,7 @@ module Polyamorous
       end
     end
 
-    # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
-    # in order to call #make_joins instead of #make_inner_joins.
+    # Replaces ActiveRecord::Associations::JoinDependency#join_constraints.
     #
     # This internal method was changed in Rails 5.0 by commit
     # https://github.com/rails/rails/commit/e038975
@@ -55,9 +54,9 @@ module Polyamorous
     def join_constraints(outer_joins, join_type)
       joins = join_root.children.flat_map { |child|
         if join_type == Arel::Nodes::OuterJoin
-          make_left_outer_joins join_root, child
+          make_polyamorous_left_outer_joins join_root, child
         else
-          make_joins join_root, child
+          make_polyamorous_inner_joins join_root, child
         end
       }
 
@@ -72,17 +71,31 @@ module Polyamorous
       }
     end
 
-    # Replaces ActiveRecord::Associations::JoinDependency#make_inner_joins.
+    # Replaces ActiveRecord::Associations::JoinDependency#make_left_outer_joins.
     #
-    def make_joins(parent, child)
-      [
-        make_constraints(
-          parent, child, child.tables, child.join_type || Arel::Nodes::InnerJoin
-        )
-      ] + child.children.flat_map { |c| make_inner_joins(child, c) }
+    def make_polyamorous_left_outer_joins(parent, child)
+      tables    = child.tables
+      join_type = child.join_type || Arel::Nodes::OuterJoin
+      info      = make_constraints parent, child, tables, join_type
+
+      [info] + child.children.flat_map { |c|
+        make_polyamorous_left_outer_joins(child, c)
+      }
     end
 
-    private :make_joins
+    # Replaces ActiveRecord::Associations::JoinDependency#make_inner_joins.
+    #
+    def make_polyamorous_inner_joins(parent, child)
+      tables    = child.tables
+      join_type = child.join_type || Arel::Nodes::InnerJoin
+      info      = make_constraints parent, child, tables, join_type
+
+      [info] + child.children.flat_map { |c|
+        make_polyamorous_inner_joins(child, c)
+      }
+    end
+
+    private :make_polyamorous_inner_joins, :make_polyamorous_left_outer_joins
 
     module ClassMethods
       # Prepended before ActiveRecord::Associations::JoinDependency#walk_tree.

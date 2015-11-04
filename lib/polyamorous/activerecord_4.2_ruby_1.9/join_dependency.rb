@@ -43,10 +43,10 @@ module Polyamorous
     end
 
     # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
-    # to call #make_joins instead of #make_inner_joins.
+    # to call #make_polyamorous_inner_joins instead of #make_inner_joins.
     def join_constraints_with_polymorphism(outer_joins)
       joins = join_root.children.flat_map { |child|
-        make_joins(join_root, child)
+        make_polyamorous_inner_joins join_root, child)
       }
       joins.concat outer_joins.flat_map { |oj|
         if join_root.match? oj.join_root
