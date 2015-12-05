@@ -48,8 +48,9 @@ module Polyamorous
     # Replaces ActiveRecord::Associations::JoinDependency#join_constraints.
     #
     # This internal method was changed in Rails 5.0 by commit
-    # https://github.com/rails/rails/commit/e038975
-    # which added left_outer_joins and passing `join_type` to the method.
+    # https://github.com/rails/rails/commit/e038975 which added
+    # left_outer_joins (see #make_polyamorous_left_outer_joins below) and added
+    # passing an additional argument, `join_type`, to #join_constraints.
     #
     def join_constraints(outer_joins, join_type)
       joins = join_root.children.flat_map { |child|
@@ -71,7 +72,9 @@ module Polyamorous
       }
     end
 
-    # Replaces ActiveRecord::Associations::JoinDependency#make_left_outer_joins.
+    # Replaces ActiveRecord::Associations::JoinDependency#make_left_outer_joins,
+    # a new method that was added in Rails 5.0 with the following commit:
+    # https://github.com/rails/rails/commit/e038975
     #
     def make_polyamorous_left_outer_joins(parent, child)
       tables    = child.tables
