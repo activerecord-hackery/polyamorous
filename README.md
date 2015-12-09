@@ -20,7 +20,7 @@ Polyamorous is an extraction of shared code from the
 (https://github.com/activerecord-hackery/polyamorous/graphs/contributors).
 
 It is an internal library for extending various versions of Active Record with
-polymorphism. There is no public API, so it's ":nodoc:". Move along. Nothing to
+polymorphism. There is no public API, so it's `:nodoc:`. Move along. Nothing to
 see here.
 
-Copyright &copy; 2011-2015 [Ernie Miller](http://twitter.com/erniemiller)
+Copyright &copy; 2011-2016 [Ernie Miller](http://twitter.com/erniemiller)
