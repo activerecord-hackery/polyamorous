@@ -38,12 +38,20 @@ env:
 
 matrix:
   include:
+    - rvm: 2.3.0
+      env: RAILS=master DB=sqlite3
+    - rvm: 2.3.0
+      env: RAILS=master DB=mysql
+    - rvm: 2.3.0
+      env: RAILS=master DB=postgres
+
     - rvm: 2.2.3
       env: RAILS=master DB=sqlite3
     - rvm: 2.2.3
       env: RAILS=master DB=mysql
     - rvm: 2.2.3
       env: RAILS=master DB=postgres
+
   allow_failures:
     - env: RAILS=master DB=sqlite3
     - env: RAILS=master DB=mysql
