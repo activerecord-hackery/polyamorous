@@ -22,5 +22,3 @@ Polyamorous is an extraction of shared code from the
 It is an internal library for extending various versions of Active Record with
 polymorphism. There is no public API, so it's `:nodoc:`. Move along. Nothing to
 see here.
-
-Copyright &copy; 2011-2016 [Ernie Miller](http://twitter.com/erniemiller)
