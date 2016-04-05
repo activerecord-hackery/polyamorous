@@ -78,7 +78,7 @@ module Polyamorous
     #
     def make_polyamorous_left_outer_joins(parent, child)
       tables    = child.tables
-      join_type = child.join_type || Arel::Nodes::OuterJoin
+      join_type = Arel::Nodes::OuterJoin
       info      = make_constraints parent, child, tables, join_type
 
       [info] + child.children.flat_map { |c|
