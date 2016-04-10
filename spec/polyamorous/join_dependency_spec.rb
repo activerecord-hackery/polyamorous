@@ -82,14 +82,16 @@ module Polyamorous
       specify { expect(subject.send(method, join_associations)[1].table_name)
         .to eq 'comments' }
     end
-    
-    if ActiveRecord::VERSION::MAJOR >= 5
-      context '#left_outer_joins in Rails 5 overrides join type specified' do
-        subject { new_join_dependency Person, new_join(:articles) }
-        specify {
-          expect(subject.join_constraints([], Arel::Nodes::OuterJoin).first.joins.map(&:class))
-          .to eq [Arel::Nodes::OuterJoin] }
-      end
+
+    context '#left_outer_join in Rails 5 overrides join type specified',
+      if: ActiveRecord::VERSION::MAJOR >= 5 do
+
+      let(:join_type_class) {
+        new_join_dependency(Person, new_join(:articles))
+        .join_constraints([], Arel::Nodes::OuterJoin).first.joins.map(&:class)
+      }
+
+      specify { expect(join_type_class).to eq [Arel::Nodes::OuterJoin] }
     end
   end
 end
