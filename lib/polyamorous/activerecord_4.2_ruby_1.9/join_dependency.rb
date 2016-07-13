@@ -20,6 +20,7 @@ module Polyamorous
     end
 
     # Replaces ActiveRecord::Associations::JoinDependency#build
+    #
     def build_with_polymorphism(associations, base_klass)
       associations.map do |name, right|
         if name.is_a? Join
@@ -43,7 +44,8 @@ module Polyamorous
     end
 
     # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
-    # to call #make_polyamorous_inner_joins instead of #make_inner_joins.
+    # to call #make_polyamorous_inner_joins instead of #make_inner_joins
+    #
     def join_constraints_with_polymorphism(outer_joins)
       joins = join_root.children.flat_map { |child|
         make_polyamorous_inner_joins join_root, child
@@ -60,7 +62,8 @@ module Polyamorous
     end
 
     module ClassMethods
-    # Replaces ActiveRecord::Associations::JoinDependency#self.walk_tree
+      # Replaces ActiveRecord::Associations::JoinDependency#self.walk_tree
+      #
       def walk_tree_with_polymorphism(associations, hash)
         case associations
         when TreeNode

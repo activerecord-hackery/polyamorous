@@ -22,6 +22,7 @@ module Polyamorous
 
     # Reference: https://github.com/rails/rails/commit/9b15db5
     # NOTE: Not sure we still need it?
+    #
     def ==(other)
       base_klass == other.base_klass
     end

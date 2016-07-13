@@ -1,6 +1,7 @@
 module Polyamorous
   module JoinDependencyExtensions
     # Replaces ActiveRecord::Associations::JoinDependency#make_inner_joins
+    #
     def make_polyamorous_inner_joins(parent, child)
       make_constraints(
         parent, child, child.tables, child.join_type || Arel::Nodes::InnerJoin

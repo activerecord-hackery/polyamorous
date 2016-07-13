@@ -2,8 +2,7 @@
 
 module Polyamorous
   module JoinDependencyExtensions
-
-    # Replaces ActiveRecord::Associations::JoinDependency#build.
+    # Replaces ActiveRecord::Associations::JoinDependency#build
     #
     def build(associations, base_klass)
       associations.map do |name, right|
@@ -45,7 +44,7 @@ module Polyamorous
       end
     end
 
-    # Replaces ActiveRecord::Associations::JoinDependency#join_constraints.
+    # Replaces ActiveRecord::Associations::JoinDependency#join_constraints
     #
     # This internal method was changed in Rails 5.0 by commit
     # https://github.com/rails/rails/commit/e038975 which added
@@ -86,7 +85,7 @@ module Polyamorous
       }
     end
 
-    # Replaces ActiveRecord::Associations::JoinDependency#make_inner_joins.
+    # Replaces ActiveRecord::Associations::JoinDependency#make_inner_joins
     #
     def make_polyamorous_inner_joins(parent, child)
       tables    = child.tables
@@ -101,7 +100,7 @@ module Polyamorous
     private :make_polyamorous_inner_joins, :make_polyamorous_left_outer_joins
 
     module ClassMethods
-      # Prepended before ActiveRecord::Associations::JoinDependency#walk_tree.
+      # Prepended before ActiveRecord::Associations::JoinDependency#walk_tree
       #
       def walk_tree(associations, hash)
         case associations
