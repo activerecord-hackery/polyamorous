@@ -62,8 +62,19 @@ module Polyamorous
     module ClassMethods
     # Replaces ActiveRecord::Associations::JoinDependency#self.walk_tree
       def walk_tree_with_polymorphism(associations, hash)
-        if TreeNode === associations
+        case associations
+        when TreeNode
           associations.add_to_tree(hash)
+        when Hash
+          associations.each do |k, v|
+            cache =
+              if TreeNode === k
+                k.add_to_tree(hash)
+              else
+                hash[k] ||= {}
+              end
+            walk_tree(v, cache)
+         end
         else
           walk_tree_without_polymorphism(associations, hash)
         end

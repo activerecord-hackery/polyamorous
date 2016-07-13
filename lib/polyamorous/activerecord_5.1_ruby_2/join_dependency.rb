@@ -104,8 +104,19 @@ module Polyamorous
       # Prepended before ActiveRecord::Associations::JoinDependency#walk_tree.
       #
       def walk_tree(associations, hash)
-        if TreeNode === associations
+        case associations
+        when TreeNode
           associations.add_to_tree(hash)
+        when Hash
+          associations.each do |k, v|
+            cache =
+              if TreeNode === k
+                k.add_to_tree(hash)
+              else
+                hash[k] ||= {}
+              end
+            walk_tree(v, cache)
+         end
         else
           super(associations, hash)
         end
