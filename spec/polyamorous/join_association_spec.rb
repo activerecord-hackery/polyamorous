@@ -48,7 +48,7 @@ module Polyamorous
     end
 
     it 'sets the polymorphic option to true after initializing' do
-      expect(join_association.instance_eval(polymorphic)).to be_true
+      expect(join_association.instance_eval(polymorphic)).to be true
     end
   end
 end
