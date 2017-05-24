@@ -9,6 +9,8 @@ module Polyamorous
         if name.is_a? Join
           reflection = find_reflection base_klass, name.name
           reflection.check_validity!
+          reflection.check_eager_loadable! if ActiveRecord::VERSION::MAJOR >= 5
+
           klass = if reflection.polymorphic?
             name.klass || base_klass
           else
@@ -18,6 +20,8 @@ module Polyamorous
         else
           reflection = find_reflection base_klass, name
           reflection.check_validity!
+          reflection.check_eager_loadable! if ActiveRecord::VERSION::MAJOR >= 5
+
           if reflection.polymorphic?
             raise ActiveRecord::EagerLoadPolymorphicError.new(reflection)
           end
@@ -115,7 +119,7 @@ module Polyamorous
                 hash[k] ||= {}
               end
             walk_tree(v, cache)
-         end
+          end
         else
           super(associations, hash)
         end
