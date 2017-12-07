@@ -1,11 +1,7 @@
 # Polyamorous
-
-[![Build Status](https://travis-ci.org/activerecord-hackery/polyamorous.svg)]
-(https://travis-ci.org/activerecord-hackery/polyamorous)
-[![Gem Version](https://badge.fury.io/rb/polyamorous.svg)]
-(http://badge.fury.io/rb/polyamorous)
-[![Code Climate](https://codeclimate.com/github/activerecord-hackery/polyamorous/badges/gpa.svg)]
-(https://codeclimate.com/github/activerecord-hackery/polyamorous)
+[![Build Status](https://travis-ci.org/activerecord-hackery/polyamorous.svg?branch=master)](https://travis-ci.org/activerecord-hackery/polyamorous)
+[![Gem Version](https://badge.fury.io/rb/polyamorous.svg)](https://badge.fury.io/rb/polyamorous)
+[![Code Climate](https://codeclimate.com/github/activerecord-hackery/polyamorous/badges/gpa.svg)](https://codeclimate.com/github/activerecord-hackery/polyamorous)
 
 Polyamorous is an extraction of shared code from the
 [Active Record Hackery](https://github.com/activerecord-hackery) gems
