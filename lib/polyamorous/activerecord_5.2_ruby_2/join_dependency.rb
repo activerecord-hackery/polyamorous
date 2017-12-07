@@ -1,4 +1,4 @@
-# active_record_5.1_ruby_2/join_dependency.rb
+# active_record_5.2_ruby_2/join_dependency.rb
 
 module Polyamorous
   module JoinDependencyExtensions
@@ -12,11 +12,11 @@ module Polyamorous
           reflection.check_eager_loadable! if ActiveRecord::VERSION::MAJOR >= 5
 
           klass = if reflection.polymorphic?
-                    name.klass || base_klass
-                  else
-                    reflection.klass
-                  end
-          JoinAssociation.new(reflection, build(right, klass), name.klass, name.type)
+            name.klass || base_klass
+          else
+            reflection.klass
+          end
+          JoinAssociation.new(reflection, build(right, klass), alias_tracker, name.klass, name.type)
         else
           reflection = find_reflection base_klass, name
           reflection.check_validity!
@@ -25,7 +25,7 @@ module Polyamorous
           if reflection.polymorphic?
             raise ActiveRecord::EagerLoadPolymorphicError.new(reflection)
           end
-          JoinAssociation.new reflection, build(right, reflection.klass)
+          JoinAssociation.new(reflection, build(right, reflection.klass), alias_tracker)
         end
       end
     end
@@ -42,9 +42,9 @@ module Polyamorous
 
     def build_join_association_respecting_polymorphism(reflection, parent, klass)
       if reflection.polymorphic? && klass
-        JoinAssociation.new(reflection, self, klass)
+        JoinAssociation.new(reflection, self, alias_tracker, klass)
       else
-        JoinAssociation.new(reflection, self)
+        JoinAssociation.new(reflection, self, alias_tracker)
       end
     end
 
