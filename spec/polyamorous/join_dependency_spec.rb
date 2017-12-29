@@ -11,10 +11,10 @@ module Polyamorous
       end
 
     context 'with symbol joins' do
-      subject { new_join_dependency Person, :articles => :comments }
+      subject { new_join_dependency Person, articles: :comments }
 
       specify { expect(subject.send(method, join_associations).size)
-        .to eq 2 }
+        .to eq(2) }
       specify { expect(subject.send(method, join_associations).map(&:join_type))
         .to be_all { Polyamorous::InnerJoin } }
     end
@@ -84,12 +84,17 @@ module Polyamorous
     end
 
     context '#left_outer_join in Rails 5 overrides join type specified',
-      if: ActiveRecord::VERSION::MAJOR >= 5 do
+            if: ActiveRecord::VERSION::MAJOR >= 5 && ActiveRecord::VERSION::MINOR < 2 do
 
-      let(:join_type_class) {
-        new_join_dependency(Person, new_join(:articles))
-        .join_constraints([], Arel::Nodes::OuterJoin).first.joins.map(&:class)
-      }
+      let(:join_type_class) do
+        new_join_dependency(
+          Person,
+          new_join(:articles)
+        ).join_constraints(
+          [],
+          Arel::Nodes::OuterJoin
+        ).first.joins.map(&:class)
+      end
 
       specify { expect(join_type_class).to eq [Arel::Nodes::OuterJoin] }
     end
