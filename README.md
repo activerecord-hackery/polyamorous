@@ -11,7 +11,8 @@ Polyamorous is an extraction of shared code from the
 [Ernie Miller](http://twitter.com/erniemiller) and maintained by
 [Ryan Bigg](http://twitter.com/ryanbigg),
 [Xiang Li](http://bigxiang.github.io),
-[Jon Atack](http://twitter.com/jonatack) and a great little group of
+[Jon Atack](http://twitter.com/jonatack),
+[Sean Carroll](https://github.com/seanfcarroll) and a great little group of
 [contributors]
 (https://github.com/activerecord-hackery/polyamorous/graphs/contributors).
 
