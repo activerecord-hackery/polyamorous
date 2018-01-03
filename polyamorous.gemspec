@@ -20,18 +20,12 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "polyamorous"
 
-  s.add_dependency 'activerecord', '>= 3.0'
+  s.add_dependency 'activerecord', '>= 4.2'
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'machinist', '~> 1.0.6'
   s.add_development_dependency 'faker', '~> 1.6.5'
   s.add_development_dependency 'sqlite3', '~> 1.3.3'
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }  
   s.require_paths = ["lib"]
-
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
 end
