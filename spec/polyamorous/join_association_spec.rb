@@ -24,6 +24,7 @@ module Polyamorous
     }
 
     it 'respects polymorphism on equality test' do
+      skip if ActiveRecord::VERSION::STRING >= '5.2'
       expect(subject).to eq(
         join_dependency.build_join_association_respecting_polymorphism(
           reflection, parent, Person

@@ -12,17 +12,6 @@ rvm:
   - 2.3.6
   - 2.2.9
 
-env:
-  - RAILS=4-2-stable AREL=6-0-stable DB=sqlite
-  - RAILS=4-2-stable AREL=6-0-stable DB=mysql
-  - RAILS=4-2-stable AREL=6-0-stable DB=postgres
-  - RAILS=5-0-stable AREL=7-0-stable DB=sqlite
-  - RAILS=5-0-stable AREL=7-0-stable DB=mysql
-  - RAILS=5-0-stable AREL=7-0-stable DB=postgres
-  - RAILS=5-1-stable AREL=8-0-stable DB=sqlite
-  - RAILS=5-1-stable AREL=8-0-stable DB=mysql
-  - RAILS=5-1-stable AREL=8-0-stable DB=postgres
-
 matrix:
   include:
     - rvm: 2.5.0
