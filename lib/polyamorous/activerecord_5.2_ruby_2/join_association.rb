@@ -3,13 +3,8 @@
 module Polyamorous
   module JoinAssociationExtensions
     include SwappingReflectionClass
-    def self.prepended(base)
-      base.class_eval { attr_reader :join_type }
-    end
 
-    def initialize(reflection, children, alias_tracker, polymorphic_class = nil,
-      join_type = Arel::Nodes::InnerJoin)
-      @join_type = join_type
+    def initialize(reflection, children, alias_tracker, polymorphic_class = nil)
       if polymorphic_class && ::ActiveRecord::Base > polymorphic_class
         swapping_reflection_klass(reflection, polymorphic_class) do |reflection|
           super(reflection, children, alias_tracker)
@@ -37,3 +32,4 @@ module Polyamorous
     end
   end
 end
+
