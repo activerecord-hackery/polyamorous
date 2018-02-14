@@ -22,6 +22,9 @@ env:
   - RAILS=5-1-stable AREL=8-0-stable DB=sqlite
   - RAILS=5-1-stable AREL=8-0-stable DB=mysql
   - RAILS=5-1-stable AREL=8-0-stable DB=postgres
+  - RAILS=5-2-stable AREL=8-0-stable DB=sqlite
+  - RAILS=5-2-stable AREL=8-0-stable DB=mysql
+  - RAILS=5-2-stable AREL=8-0-stable DB=postgres
 
 matrix:
   include:
