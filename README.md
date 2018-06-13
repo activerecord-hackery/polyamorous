@@ -13,8 +13,7 @@ Polyamorous is an extraction of shared code from the
 [Xiang Li](http://bigxiang.github.io),
 [Jon Atack](http://twitter.com/jonatack),
 [Sean Carroll](https://github.com/seanfcarroll) and a great little group of
-[contributors]
-(https://github.com/activerecord-hackery/polyamorous/graphs/contributors).
+[contributors](https://github.com/activerecord-hackery/polyamorous/graphs/contributors).
 
 It is an internal library for extending various versions of Active Record with
 polymorphism. There is no public API, so it's `:nodoc:`. Move along. Nothing to
