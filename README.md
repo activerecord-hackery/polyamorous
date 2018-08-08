@@ -1,4 +1,10 @@
 # Polyamorous
+
+## Announcement
+
+Polyamorous is merged into Ransack since Squeel and MetaSearch is not maintained anymore. 
+
+
 [![Build Status](https://travis-ci.org/activerecord-hackery/polyamorous.svg?branch=master)](https://travis-ci.org/activerecord-hackery/polyamorous)
 [![Gem Version](https://badge.fury.io/rb/polyamorous.svg)](https://badge.fury.io/rb/polyamorous)
 [![Code Climate](https://codeclimate.com/github/activerecord-hackery/polyamorous/badges/gpa.svg)](https://codeclimate.com/github/activerecord-hackery/polyamorous)
