@@ -55,7 +55,10 @@ module Polyamorous
     # left_outer_joins (see #make_polyamorous_left_outer_joins below) and added
     # passing an additional argument, `join_type`, to #join_constraints.
     #
-    def join_constraints(outer_joins, join_type)
+    # Third argument was added to support rails 5.2.1 since commit
+    # https://github.com/rails/rails/commit/50036e6
+    def join_constraints(outer_joins, join_type, alias_tracker = nil)
+      @alias_tracker = alias_tracker if alias_tracker
       joins = join_root.children.flat_map { |child|
         if join_type == Arel::Nodes::OuterJoin
           make_polyamorous_left_outer_joins join_root, child
